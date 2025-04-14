@@ -22,7 +22,7 @@ public class App extends Application {
         TextField ratingField = new TextField();
         TextField experienceField = new TextField();
         CheckBox isActiveCheckBox = new CheckBox("Active");
-
+        
         // === Update Fields ===
         TextField updateIdField = new TextField();
         ComboBox<String> updateFieldDropdown = new ComboBox<>();
@@ -33,7 +33,7 @@ public class App extends Application {
         TextArea outputArea = new TextArea();
         outputArea.setEditable(false);
         outputArea.setWrapText(true);
-
+        
         // === Buttons ===
         Button addButton = new Button("Add Employee");
         Button viewAllButton = new Button("Show All Employees");
@@ -60,7 +60,7 @@ public class App extends Application {
         formGrid.add(experienceField, 1, 5);
         formGrid.add(isActiveCheckBox, 1, 6);
         formGrid.add(addButton, 1, 7);
-
+        
         // === Update and Delete Section ===
         // HBox updateBox = new HBox(10,
         //         new Label("Emp ID:"), updateIdField,
@@ -75,9 +75,9 @@ public class App extends Application {
                 new Label("Field:"), updateFieldDropdown,
                 new Label("New Value:"), updateValueField,
                 updateButton, deleteButton
-        );
+                );
         updateBox.setPadding(new Insets(10));
-
+        
         // === Output Section ===
         VBox outputBox = new VBox(10, viewAllButton, outputArea);
         outputBox.setPadding(new Insets(10));
@@ -100,15 +100,16 @@ public class App extends Application {
                 double rating = Double.parseDouble(ratingField.getText());
                 int experience = Integer.parseInt(experienceField.getText());
                 boolean isActive = isActiveCheckBox.isSelected();
-
+                
                 Employee<Integer> emp = new Employee<>(id, name, dept, salary, rating, experience, isActive);
                 database.addEmployee(emp);
                 outputArea.setText("Employee added:\n" + emp);
+                clearFields(idField, nameField, departmentField, salaryField, ratingField, experienceField, isActiveCheckBox);
             } catch (Exception ex) {
                 outputArea.setText("Error adding employee. Check input values.");
             }
         });
-
+        
         viewAllButton.setOnAction(e -> {
             StringBuilder sb = new StringBuilder("=== All Employees ===\n");
             for (Employee<Integer> emp : database.getAllEmployees()) {
@@ -123,13 +124,13 @@ public class App extends Application {
                 String field = updateFieldDropdown.getValue();
                 String rawValue = updateValueField.getText();
                 Object value;
-
+                
                 switch (field.toLowerCase()) {
                     case "salary":
                     case "performancerating":
-                        value = Double.parseDouble(rawValue);
+                    value = Double.parseDouble(rawValue);
                         break;
-                    case "yearsofexperience":
+                        case "yearsofexperience":
                         value = Integer.parseInt(rawValue);
                         break;
                     case "isactive":
@@ -158,6 +159,18 @@ public class App extends Application {
         });
     }
 
+    
+    private void clearFields(TextField idField, TextField nameField, TextField departmentField, TextField salaryField,
+            TextField ratingField, TextField experienceField, CheckBox isActiveCheckBox) {
+                idField.clear();
+                nameField.clear();
+                departmentField.clear();
+                salaryField.clear();
+                ratingField.clear();
+                experienceField.clear();
+                isActiveCheckBox.setSelected(false);
+    }
+    
     public static void main(String[] args) {
         launch(args);
     }
