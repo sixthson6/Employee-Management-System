@@ -2,11 +2,8 @@ package org.employees;
 
 import java.util.*;
 import java.util.stream.Collectors;
-/**
- * Employee database manager class handling storage and CRUD operations.
- *
- * @param <T> the type of the unique identifier for employees
- */
+
+
 public class EmployeeDatabase<T> {
     
     private  final Map<T, Employee<T>> employeeMap = new HashMap<>();

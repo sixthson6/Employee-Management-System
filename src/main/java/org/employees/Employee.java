@@ -2,17 +2,12 @@ package org.employees;
 
 import java.util.Objects;
 
-/**
- * Generic Employee class representing an employee in the system.
- *
- * @param <T> the type of the unique identifier (e.g., Integer, UUID)
- */
 public class Employee<T> implements Comparable<Employee<T>> {
     private T employeeId;
     private String name;
     private String department;
     private double salary;
-    private double performanceRating; // 0 to 5 scale
+    private double performanceRating; 
     private int yearsOfExperience;
     private boolean isActive;
 
@@ -27,7 +22,7 @@ public class Employee<T> implements Comparable<Employee<T>> {
         this.isActive = isActive;
     }
 
-    // Getters and setters
+    
     public T getEmployeeId() {
         return employeeId;
     }
@@ -84,13 +79,13 @@ public class Employee<T> implements Comparable<Employee<T>> {
         isActive = active;
     }
 
-    // Natural ordering: sort by years of experience (descending)
+
     @Override
     public int compareTo(Employee<T> other) {
         return Integer.compare(other.yearsOfExperience, this.yearsOfExperience);
     }
 
-    // Equals and hashCode based on employeeId
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -106,7 +101,7 @@ public class Employee<T> implements Comparable<Employee<T>> {
 
     @Override
     public String toString() {
-        return String.format("Employee [ID=%s, Name=%s, Dept=%s, Salary=%.2f, Rating=%.1f, Experience=%d yrs, Active=%b]",
-                employeeId, name, department, salary, performanceRating, yearsOfExperience, isActive);
+        String strFormat = "Employee [ID=%s, Name=%s, Dept=%s, Salary=%.2f, Rating=%.1f, Experience=%d yrs, Active=%b]\n";
+            return String.format(strFormat, employeeId, name, department, salary, performanceRating, yearsOfExperience, isActive);
+        }
     }
-}
