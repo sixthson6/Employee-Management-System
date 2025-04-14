@@ -1,5 +1,7 @@
 package org.employees;
 
+import java.util.List;
+
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -22,7 +24,7 @@ public class App extends Application {
         );
         root.setPadding(new Insets(15));
 
-        Scene scene = new Scene(root, 750, 600);
+        Scene scene = new Scene(root, 1100, 600);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -92,8 +94,9 @@ public class App extends Application {
     private HBox buildMainBox() {
         GridPane formGrid = buildFormSection();
         VBox updateBox = buildUpdateSection();
+        VBox searchBox = buildSearchSection(outputArea);
     
-        HBox mainBox = new HBox(40, formGrid, updateBox);
+        HBox mainBox = new HBox(40, formGrid, updateBox, searchBox);
         mainBox.setPadding(new Insets(10));
         return mainBox;
     }
@@ -180,6 +183,72 @@ public class App extends Application {
         } catch (Exception ex) {
             outputArea.setText("❌ Invalid ID for deletion.");
         }
+    }
+
+    private VBox buildSearchSection(TextArea outputArea) {
+        VBox searchBox = new VBox(10,
+            buildSearchByDepartment(outputArea),
+            buildSearchByName(outputArea),
+            buildPerformanceFilter(outputArea),
+            buildSalaryRangeFilter(outputArea)
+        );
+        searchBox.setPadding(new Insets(10));
+        searchBox.setStyle("-fx-border-color: gray; -fx-border-width: 1;");
+        return searchBox;
+    }
+    
+
+    private HBox buildSearchByDepartment(TextArea outputArea) {
+        TextField deptField = new TextField();
+        Button btn = new Button("Search Department");
+        btn.setOnAction(e -> {displayResults(database.searchByDepartment(deptField.getText()), outputArea);
+            deptField.clear();
+        });
+        return new HBox(10, new Label("Department:"), deptField, btn);
+    }
+    
+
+    private HBox buildSearchByName(TextArea outputArea) {
+        TextField nameField = new TextField();
+        Button btn = new Button("Search Name");
+        btn.setOnAction(e -> {
+            displayResults(database.searchByName(nameField.getText()), outputArea);
+            nameField.clear();
+        });
+
+        return new HBox(10, new Label("Name Contains:"), nameField, btn);
+    }
+    
+
+    private HBox buildSalaryRangeFilter(TextArea outputArea) {
+        TextField minField = new TextField();
+        TextField maxField = new TextField();
+        Button btn = new Button("Filter Salary Range");
+        btn.setOnAction(e -> {
+            double min = Double.parseDouble(minField.getText());
+            double max = Double.parseDouble(maxField.getText());
+            displayResults(database.filterBySalaryRange(min, max), outputArea);
+            minField.clear(); maxField.clear();
+        });
+        return new HBox(10, new Label("Min:"), minField, new Label("Max:"), maxField, btn);
+    }
+
+    
+    private HBox buildPerformanceFilter(TextArea outputArea) {
+        TextField ratingField = new TextField();
+        Button btn = new Button("Filter Rating ≥");
+        btn.setOnAction(e -> {
+            double rating = Double.parseDouble(ratingField.getText());
+            displayResults(database.filterByPerformance(rating), outputArea);
+            ratingField.clear();
+        });
+        return new HBox(10, new Label("Min Rating:"), ratingField, btn);
+    }
+    
+    private void displayResults(List<Employee<Integer>> results, TextArea outputArea) {
+        StringBuilder sb = new StringBuilder("Search Results:\n");
+        results.forEach(emp -> sb.append(emp).append("\n"));
+        outputArea.setText(sb.toString());
     }
 
     public static void main(String[] args) {

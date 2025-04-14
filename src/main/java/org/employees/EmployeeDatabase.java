@@ -8,25 +8,25 @@ import java.util.stream.Collectors;
  * @param <T> the type of the unique identifier for employees
  */
 public class EmployeeDatabase<T> {
-    // private Employee<T> employee; 
+    
     private  final Map<T, Employee<T>> employeeMap = new HashMap<>();
 
-    // Create / Add Employee
+    
     public void addEmployee(Employee<T> employee) {
         employeeMap.put(employee.getEmployeeId(), employee);
     }
 
-    // Read / Retrieve all Employees
+    
     public Collection<Employee<T>> getAllEmployees() {
         return employeeMap.values();
     }
 
-    // Delete / Remove Employee by ID
+    
     public void removeEmployee(T employeeId) {
         employeeMap.remove(employeeId);
     }
 
-    // Update a specific field dynamically
+    
     public boolean updateEmployeeDetails(T employeeId, String field, Object newValue) {
         Employee<T> employee = employeeMap.get(employeeId);
         if (employee == null) return false;
@@ -51,47 +51,75 @@ public class EmployeeDatabase<T> {
                 employee.setActive((Boolean) newValue);
                 break;
             default:
-                return false; // Unknown field
+                return false;
         }
         return true;
     }
 
-    // Optional: Get one employee by ID
+    
     public Employee<T> getEmployeeById(T employeeId) {
         return employeeMap.get(employeeId);
     }
 
-    // Get employees by department
+    
     public List<Employee<T>> getEmployeesByDepartment(String department) {
         return employeeMap.values().stream()
                 .filter(emp -> emp.getDepartment().equalsIgnoreCase(department))
                 .collect(Collectors.toList());
     }
 
-    // Get employees by name keyword
+    
     public List<Employee<T>> searchEmployeesByName(String keyword) {
         return employeeMap.values().stream()
                 .filter(emp -> emp.getName().toLowerCase().contains(keyword.toLowerCase()))
                 .collect(Collectors.toList());
     }
 
-    // Get high performing employees (e.g., rating >= threshold)
+    
     public List<Employee<T>> getHighPerformers(double threshold) {
         return employeeMap.values().stream()
                 .filter(emp -> emp.getPerformanceRating() >= threshold)
                 .collect(Collectors.toList());
     }
 
-    // Get employees within salary range
+    
     public List<Employee<T>> getEmployeesBySalaryRange(double min, double max) {
         return employeeMap.values().stream()
                 .filter(emp -> emp.getSalary() >= min && emp.getSalary() <= max)
                 .collect(Collectors.toList());
     }
 
-    // Iterator to traverse employees
+
     public Iterator<Employee<T>> getEmployeeIterator() {
         return employeeMap.values().iterator();
+    }
+
+    
+    public List<Employee<T>> searchByDepartment(String department) {
+        return employeeMap.values().stream()
+                .filter(emp -> emp.getDepartment().equalsIgnoreCase(department))
+                .collect(Collectors.toList());
+    }
+
+    
+    public List<Employee<T>> searchByName(String keyword) {
+        return employeeMap.values().stream()
+                .filter(emp -> emp.getName().toLowerCase().contains(keyword.toLowerCase()))
+                .collect(Collectors.toList());
+    }
+
+    
+    public List<Employee<T>> filterByPerformance(double minRating) {
+        return employeeMap.values().stream()
+                .filter(emp -> emp.getPerformanceRating() >= minRating)
+                .collect(Collectors.toList());
+    }
+
+    
+    public List<Employee<T>> filterBySalaryRange(double minSalary, double maxSalary) {
+        return employeeMap.values().stream()
+                .filter(emp -> emp.getSalary() >= minSalary && emp.getSalary() <= maxSalary)
+                .collect(Collectors.toList());
     }
 
 }
