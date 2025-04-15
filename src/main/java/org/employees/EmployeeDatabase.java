@@ -119,4 +119,13 @@ public class EmployeeDatabase<T> {
                 .collect(Collectors.toList());
     }
 
+    public List<Employee<T>> getTop5HighestPaid() {
+        
+        List<Employee<T>> employees = new ArrayList<>(employeeMap.values());
+        return employees.stream()
+                .sorted((e1, e2) -> Double.compare(e2.getSalary(), e1.getSalary())) // Sort by salary, highest first
+                .limit(5) 
+                .collect(Collectors.toList());
+    }
+
 }

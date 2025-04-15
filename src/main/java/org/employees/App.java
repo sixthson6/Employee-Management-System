@@ -23,12 +23,14 @@ public class App extends Application {
 
         VBox root = new VBox(15,
                 buildMainBox(),
+                buildSalaryManagementSection(outputArea),
                 buildSortingSection(outputArea),
+                buildDisplaySection(outputArea),
                 buildOutputSection()
         );
         root.setPadding(new Insets(15));
 
-        Scene scene = new Scene(root, 1100, 600);
+        Scene scene = new Scene(root, 1100, 800);
         primaryStage.setScene(scene);
         primaryStage.show();
     }
@@ -188,6 +190,102 @@ public class App extends Application {
             outputArea.setText("❌ Invalid ID for deletion.");
         }
     }
+
+
+
+    private VBox buildDisplaySection(TextArea outputArea) {
+        Button forEachBtn = new Button("Display (for-each)");
+        Button streamBtn = new Button("Display (stream)");
+    
+        forEachBtn.setOnAction(e -> {
+            String result = EmployeeDisplayUtil.displayWithForEach(database);
+            outputArea.setText(result);
+        });
+    
+        streamBtn.setOnAction(e -> {
+            String result = EmployeeDisplayUtil.displayWithStream(database);
+            outputArea.setText(result);
+        });
+    
+        HBox displayButtons = new HBox(10, forEachBtn, streamBtn);
+        displayButtons.setPadding(new Insets(10));
+        displayButtons.setStyle("-fx-border-color: lightgray; -fx-border-width: 1;");
+    
+        return new VBox(10, new Label("Display Employees:"), displayButtons);
+    }
+    
+
+    //salary management
+    private VBox buildSalaryManagementSection(TextArea outputArea) {
+        VBox section = new VBox(10);
+        section.setPadding(new Insets(10));
+        section.setStyle("-fx-border-color: lightgray; -fx-border-width: 1;");
+    
+        section.getChildren().addAll(
+            buildRaisePane(outputArea),
+            buildTopPaidPane(outputArea),
+            buildAverageSalaryPane(outputArea)
+        );
+    
+        return section;
+    }
+    
+    private HBox buildRaisePane(TextArea outputArea) {
+        TextField thresholdField = new TextField();
+        thresholdField.setPromptText("Rating Threshold");
+    
+        TextField raiseField = new TextField();
+        raiseField.setPromptText("Raise %");
+    
+        Button raiseBtn = new Button("Apply Raise");
+    
+        raiseBtn.setOnAction(e -> {
+            try {
+                double threshold = Double.parseDouble(thresholdField.getText());
+                double percent = Double.parseDouble(raiseField.getText());
+                SalaryManagement.giveRaiseToTopPerformers(database, threshold, percent);
+                outputArea.setText("Raise applied to top performers!");
+            } catch (Exception ex) {
+                outputArea.setText("Invalid input for raise.");
+            }
+        });
+    
+        return new HBox(10, new Label("Threshold:"), thresholdField, new Label("Raise%:"), raiseField, raiseBtn);
+    }
+    
+    private HBox buildTopPaidPane(TextArea outputArea) {
+        Button topPaidBtn = new Button("Show Top 5 Paid");
+    
+        topPaidBtn.setOnAction(e -> {
+            List<Employee<Integer>> topEmployees = SalaryManagement.getTop5HighestPaid(database);
+            StringBuilder sb = new StringBuilder("Top 5 Highest Paid Employees:\n");
+            topEmployees.forEach(emp -> sb.append(emp).append("\n"));
+            outputArea.setText(sb.toString());
+        });
+    
+        return new HBox(10, topPaidBtn);
+    }
+
+
+
+    private HBox buildAverageSalaryPane(TextArea outputArea) {
+        TextField deptField = new TextField();
+        deptField.setPromptText("Department");
+    
+        Button avgBtn = new Button("Avg Salary");
+    
+        avgBtn.setOnAction(e -> {
+            String dept = deptField.getText();
+            double avg = SalaryManagement.calculateAverageSalaryByDepartment(database, dept);
+            outputArea.setText("Average Salary in " + dept + ": $" + String.format("%.2f", avg));
+        });
+    
+        return new HBox(10, new Label("Department:"), deptField, avgBtn);
+    }
+
+
+    
+    
 
     //sorting
     private HBox buildSortingSection(TextArea outputArea) {

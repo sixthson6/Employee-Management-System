@@ -104,4 +104,10 @@ public class Employee<T> implements Comparable<Employee<T>> {
         String strFormat = "Employee [ID=%s, Name=%s, Dept=%s, Salary=%.2f, Rating=%.1f, Experience=%d yrs, Active=%b]\n";
             return String.format(strFormat, employeeId, name, department, salary, performanceRating, yearsOfExperience, isActive);
         }
+
+
+    public Object getId() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'getId'");
+    }
     }
