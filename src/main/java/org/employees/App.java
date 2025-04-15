@@ -1,3 +1,4 @@
+
 package org.employees;
 
 import java.util.ArrayList;
@@ -25,7 +26,6 @@ public class App extends Application {
                 buildMainBox(),
                 buildSalaryManagementSection(outputArea),
                 buildSortingSection(outputArea),
-                buildDisplaySection(outputArea),
                 buildOutputSection()
         );
         root.setPadding(new Insets(15));
@@ -191,29 +191,27 @@ public class App extends Application {
         }
     }
 
-
-
     private VBox buildDisplaySection(TextArea outputArea) {
-        Button forEachBtn = new Button("Display (for-each)");
-        Button streamBtn = new Button("Display (stream)");
-    
-        forEachBtn.setOnAction(e -> {
-            String result = EmployeeDisplayUtil.displayWithForEach(database);
-            outputArea.setText(result);
-        });
-    
-        streamBtn.setOnAction(e -> {
-            String result = EmployeeDisplayUtil.displayWithStream(database);
-            outputArea.setText(result);
-        });
-    
-        HBox displayButtons = new HBox(10, forEachBtn, streamBtn);
-        displayButtons.setPadding(new Insets(10));
-        displayButtons.setStyle("-fx-border-color: lightgray; -fx-border-width: 1;");
-    
-        return new VBox(10, new Label("Display Employees:"), displayButtons);
-    }
-    
+    Button forEachBtn = new Button("Display (for-each)");
+    Button streamBtn = new Button("Display (stream)");
+
+    forEachBtn.setOnAction(e -> {
+        String result = EmployeeDisplayUtil.displayWithForEach(database);
+        outputArea.setText(result);
+    });
+
+    streamBtn.setOnAction(e -> {
+        String result = EmployeeDisplayUtil.displayWithStream(database);
+        outputArea.setText(result);
+    });
+
+    HBox displayButtons = new HBox(10, forEachBtn, streamBtn);
+    displayButtons.setPadding(new Insets(10));
+    displayButtons.setStyle("-fx-border-color: lightgray; -fx-border-width: 1;");
+
+    return new VBox(10, new Label("Display Employees:"), displayButtons);
+}
+
 
     //salary management
     private VBox buildSalaryManagementSection(TextArea outputArea) {
