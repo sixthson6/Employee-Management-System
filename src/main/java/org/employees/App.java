@@ -1,6 +1,9 @@
 package org.employees;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.function.Supplier;
 
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -20,6 +23,7 @@ public class App extends Application {
 
         VBox root = new VBox(15,
                 buildMainBox(),
+                buildSortingSection(outputArea),
                 buildOutputSection()
         );
         root.setPadding(new Insets(15));
@@ -184,6 +188,53 @@ public class App extends Application {
             outputArea.setText("❌ Invalid ID for deletion.");
         }
     }
+
+    //sorting
+    private HBox buildSortingSection(TextArea outputArea) {
+        Button sortByExperienceBtn = createSortButton("Sort by Experience", 
+            () -> sortAndDisplay(this::sortByExperience, outputArea));
+    
+        Button sortBySalaryBtn = createSortButton("Sort by Salary", 
+            () -> sortAndDisplay(this::sortBySalary, outputArea));
+    
+        Button sortByRatingBtn = createSortButton("Sort by Performance", 
+            () -> sortAndDisplay(this::sortByPerformance, outputArea));
+    
+        HBox sortBox = new HBox(10, sortByExperienceBtn, sortBySalaryBtn, sortByRatingBtn);
+        sortBox.setPadding(new Insets(10));
+        return sortBox;
+    }
+    
+    private Button createSortButton(String label, Runnable action) {
+        Button button = new Button(label);
+        button.setOnAction(e -> action.run());
+        return button;
+    }
+    
+    private void sortAndDisplay(Supplier<List<Employee<Integer>>> sorter, TextArea outputArea) {
+    List<Employee<Integer>> sorted = sorter.get();
+    displayResults(sorted, outputArea);
+    }
+
+
+    private List<Employee<Integer>> sortBySalary() {
+        List<Employee<Integer>> list = new ArrayList<>(database.getAllEmployees());
+        list.sort(EmployeeComparator.salaryComparator());
+        return list;
+    }
+
+    private List<Employee<Integer>> sortByPerformance() {
+        List<Employee<Integer>> list = new ArrayList<>(database.getAllEmployees());
+        list.sort(EmployeeComparator.performanceComparator());
+        return list;
+    }
+
+    private List<Employee<Integer>> sortByExperience() {
+        List<Employee<Integer>> list = new ArrayList<>(database.getAllEmployees());
+        Collections.sort(list); // Uses Comparable
+        return list;
+    }
+
 
     private VBox buildSearchSection(TextArea outputArea) {
         VBox searchBox = new VBox(10,
