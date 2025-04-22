@@ -12,16 +12,15 @@ public class Employee<T> implements Comparable<Employee<T>> {
     private boolean isActive;
 
     public Employee(T employeeId, String name, String department, double salary,
-                    double performanceRating, int yearsOfExperience, boolean isActive) {
-        this.employeeId = employeeId;
-        this.name = name;
-        this.department = department;
-        this.salary = salary;
-        this.performanceRating = performanceRating;
-        this.yearsOfExperience = yearsOfExperience;
-        this.isActive = isActive;
+    double performanceRating, int yearsOfExperience, boolean isActive) {
+        setEmployeeId(employeeId);
+        setName(name);
+        setDepartment(department);
+        setSalary(salary);
+        setPerformanceRating(performanceRating);
+        setYearsOfExperience(yearsOfExperience);
+        setActive(isActive);
     }
-
     
     public T getEmployeeId() {
         return employeeId;
@@ -36,6 +35,9 @@ public class Employee<T> implements Comparable<Employee<T>> {
     }
 
     public void setName(String name) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Namee cannot be empty or null.");
+        }
         this.name = name;
     }
 
@@ -44,6 +46,9 @@ public class Employee<T> implements Comparable<Employee<T>> {
     }
 
     public void setDepartment(String department) {
+        if (department == null || department.trim().isEmpty()) {
+            throw new IllegalArgumentException("Department cannot be empty or null.");
+        }
         this.department = department;
     }
 
@@ -52,6 +57,9 @@ public class Employee<T> implements Comparable<Employee<T>> {
     }
 
     public void setSalary(double salary) {
+        if (salary < 0) {
+            throw new IllegalArgumentException("Salary cannot be negative.");
+        }
         this.salary = salary;
     }
 
@@ -60,6 +68,12 @@ public class Employee<T> implements Comparable<Employee<T>> {
     }
 
     public void setPerformanceRating(double performanceRating) {
+        if (performanceRating < 0 || performanceRating > 5) {
+            throw new IllegalArgumentException("Performance rating must be between 0 and 5.");
+        }
+        if (performanceRating == 0) {
+            throw new IllegalArgumentException("Performance rating cannot be zero.");
+        }
         this.performanceRating = performanceRating;
     }
 
@@ -68,6 +82,12 @@ public class Employee<T> implements Comparable<Employee<T>> {
     }
 
     public void setYearsOfExperience(int yearsOfExperience) {
+        if (yearsOfExperience < 0) {
+            throw new IllegalArgumentException("Years of experience cannot be negative.");
+        }
+        if (yearsOfExperience == 0) {
+            throw new IllegalArgumentException("Years of experience cannot be zero.");
+        }
         this.yearsOfExperience = yearsOfExperience;
     }
 
@@ -104,10 +124,4 @@ public class Employee<T> implements Comparable<Employee<T>> {
         String strFormat = "Employee [ID=%s, Name=%s, Dept=%s, Salary=%.2f, Rating=%.1f, Experience=%d yrs, Active=%b]\n";
             return String.format(strFormat, employeeId, name, department, salary, performanceRating, yearsOfExperience, isActive);
         }
-
-
-    public Object getId() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getId'");
-    }
     }
