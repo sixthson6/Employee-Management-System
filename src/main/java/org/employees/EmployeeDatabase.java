@@ -23,9 +23,7 @@ public class EmployeeDatabase<T> {
     private static final Logger logger = Logger.getLogger(EmployeeDatabase.class.getName());
 
     static {
-        logger.setLevel(Level.ALL); // Let logger accept all levels
-
-        // Get the default console handler and set its level too
+        logger.setLevel(Level.ALL);
         for (Handler handler : Logger.getLogger("").getHandlers()) {
             handler.setLevel(Level.ALL);
         }
