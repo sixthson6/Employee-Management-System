@@ -1,14 +1,9 @@
 package org.employees;
 
-import org.employees.Employee;
-import org.employees.EmployeeDatabase;
-
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class EmployeeDisplayUtil {
 
-    // Display using for-each loop
     public static <T> String displayWithForEach(EmployeeDatabase<T> database) {
         StringBuilder sb = new StringBuilder(getHeader());
         for (Employee<T> emp : database.getAllEmployees()) {
@@ -17,7 +12,7 @@ public class EmployeeDisplayUtil {
         return sb.toString();
     }
 
-    // Display using Streams
+    
     public static <T> String displayWithStream(EmployeeDatabase<T> database) {
         return database.getAllEmployees().stream()
             .map(EmployeeDisplayUtil::formatEmployee)
