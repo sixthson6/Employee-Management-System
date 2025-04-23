@@ -1,10 +1,20 @@
 package org.employees;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.function.Supplier;
+
 import javafx.geometry.Insets;
-import javafx.scene.control.*;
-import javafx.scene.layout.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.CheckBox;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 
 public class EmployeeManagementUI {
 
@@ -136,7 +146,7 @@ public class EmployeeManagementUI {
 
             id.clear(); name.clear(); dept.clear(); salary.clear();
             rating.clear(); exp.clear(); isActive.setSelected(false);
-        } catch (Exception ex) {
+        } catch (NumberFormatException | EmployeeExceptions.InvalidSalaryException ex) {
             outputArea.setText("❌ Error adding employee. Please check inputs.");
         }
     }
@@ -150,15 +160,15 @@ public class EmployeeManagementUI {
 
             switch (field.toLowerCase()) {
                 case "salary":
-                case "performancerating": value = Double.parseDouble(input); break;
-                case "yearsofexperience": value = Integer.parseInt(input); break;
-                case "isactive": value = Boolean.parseBoolean(input); break;
+                case "performancerating": value = Double.valueOf(input); break;
+                case "yearsofexperience": value = Integer.valueOf(input); break;
+                case "isactive": value = Boolean.valueOf(input); break;
                 default: value = input;
             }
 
             boolean success = database.updateEmployeeDetails(id, field, value);
             outputArea.setText(success ? "✅ Employee updated." : "❌ Update failed.");
-        } catch (Exception ex) {
+        } catch (NumberFormatException ex) {
             outputArea.setText("❌ Invalid update input.");
         }
     }
@@ -168,7 +178,7 @@ public class EmployeeManagementUI {
             int id = Integer.parseInt(idField.getText());
             database.removeEmployee(id);
             outputArea.setText("🗑️ Employee with ID " + id + " deleted.");
-        } catch (Exception ex) {
+        } catch (NumberFormatException ex) {
             outputArea.setText("❌ Invalid ID for deletion.");
         }
     }
@@ -291,7 +301,7 @@ public class EmployeeManagementUI {
                 double percent = Double.parseDouble(raiseField.getText());
                 SalaryManagement.giveRaiseToTopPerformers(database, threshold, percent);
                 outputArea.setText("Raise applied to top performers!");
-            } catch (Exception ex) {
+            } catch (NumberFormatException ex) {
                 outputArea.setText("Invalid input for raise.");
             }
         });
