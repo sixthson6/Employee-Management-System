@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -21,6 +22,14 @@ public class EmployeeDatabase<T> {
     private  final Map<T, Employee<T>> employeeMap = new HashMap<>();
     private static final Logger logger = Logger.getLogger(EmployeeDatabase.class.getName());
 
+    static {
+        logger.setLevel(Level.ALL); // Let logger accept all levels
+
+        // Get the default console handler and set its level too
+        for (Handler handler : Logger.getLogger("").getHandlers()) {
+            handler.setLevel(Level.ALL);
+        }
+    }
     
     public void addEmployee(Employee<T> employee) throws InvalidSalaryException {
         try {
@@ -109,7 +118,7 @@ public class EmployeeDatabase<T> {
             logger.log(Level.INFO, "Employee updated: {0}", employee);
             return true;
         } catch (EmployeeNotFoundException | InvalidSalaryException | InvalidDepartmentException e) {
-            logger.severe("Error updating employee: " + e.getMessage());
+            logger.log(Level.SEVERE, "Error updating employee: {0}", e.getMessage());
             return false;
         }
     }
@@ -124,7 +133,7 @@ public class EmployeeDatabase<T> {
                 throw new EmployeeNotFoundException("Employee with ID " + employeeId + " not found.");
             }
         } catch (IllegalArgumentException | EmployeeNotFoundException e) {
-            logger.log(Level.SEVERE, "Error retrieving employee: {0}", e.getMessage());
+            logger.log(Level.SEVERE, "Error in retrieving employee: {0}", e.getMessage());
             return null;
         }
         return employeeMap.get(employeeId);
