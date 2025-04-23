@@ -2,26 +2,30 @@ package org.employees;
 
 import java.util.Objects;
 
-public class Employee<T> implements Comparable<Employee<T>> {
+public final class Employee<T> implements Comparable<Employee<T>> {
     private T employeeId;
     private String name;
     private String department;
     private double salary;
-    private double performanceRating; 
+    private double performanceRating;
     private int yearsOfExperience;
     private boolean isActive;
 
     public Employee(T employeeId, String name, String department, double salary,
-    double performanceRating, int yearsOfExperience, boolean isActive) {
-        setEmployeeId(employeeId);
-        setName(name);
-        setDepartment(department);
-        setSalary(salary);
-        setPerformanceRating(performanceRating);
-        setYearsOfExperience(yearsOfExperience);
-        setActive(isActive);
+                    double performanceRating, int yearsOfExperience, boolean isActive) throws IllegalArgumentException {
+        try {
+            setEmployeeId(employeeId);
+            setName(name);
+            setDepartment(department);
+            setSalary(salary);
+            setPerformanceRating(performanceRating);
+            setYearsOfExperience(yearsOfExperience);
+            setActive(isActive);
+        } catch (IllegalArgumentException e) {
+            throw new IllegalArgumentException("Error initializing Employee: " + e.getMessage(), e);
+        }
     }
-    
+
     public T getEmployeeId() {
         return employeeId;
     }
@@ -36,7 +40,7 @@ public class Employee<T> implements Comparable<Employee<T>> {
 
     public void setName(String name) {
         if (name == null || name.trim().isEmpty()) {
-            throw new IllegalArgumentException("Namee cannot be empty or null.");
+            throw new IllegalArgumentException("Name cannot be empty or null.");
         }
         this.name = name;
     }
@@ -99,19 +103,21 @@ public class Employee<T> implements Comparable<Employee<T>> {
         isActive = active;
     }
 
-
     @Override
     public int compareTo(Employee<T> other) {
         return Integer.compare(other.yearsOfExperience, this.yearsOfExperience);
     }
 
-
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Employee<?>)) return false;
-        Employee<?> other = (Employee<?>) o;
-        return Objects.equals(employeeId, other.employeeId);
+        try {
+            if (this == o) return true;
+            if (!(o instanceof Employee<?>)) return false;
+            Employee<?> other = (Employee<?>) o;
+            return Objects.equals(employeeId, other.employeeId);
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while comparing Employee objects.", e);
+        }
     }
 
     @Override
@@ -121,7 +127,11 @@ public class Employee<T> implements Comparable<Employee<T>> {
 
     @Override
     public String toString() {
-        String strFormat = "Employee [ID=%s, Name=%s, Dept=%s, Salary=%.2f, Rating=%.1f, Experience=%d yrs, Active=%b]\n";
+        try {
+            String strFormat = "Employee [ID=%s, Name=%s, Dept=%s, Salary=%.2f, Rating=%.1f, Experience=%d yrs, Active=%b]\n";
             return String.format(strFormat, employeeId, name, department, salary, performanceRating, yearsOfExperience, isActive);
+        } catch (Exception e) {
+            throw new RuntimeException("An error occurred while generating the string representation of Employee.", e);
         }
     }
+}

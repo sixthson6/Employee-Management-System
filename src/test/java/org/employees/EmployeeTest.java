@@ -53,8 +53,8 @@ class EmployeeTest {
         Employee<Integer> employee2 = new Employee<>(1, "Bob", "Engineering", 60000.0, 4.8, 10, false);
         Employee<Integer> employee3 = new Employee<>(2, "Charlie", "Marketing", 40000.0, 4.0, 3, true);
 
-        assertEquals(employee1, employee2); // Same employeeId
-        assertNotEquals(employee1, employee3); // Different employeeId
+        assertEquals(employee1, employee2);
+        assertNotEquals(employee1, employee3);
         assertEquals(employee1.hashCode(), employee2.hashCode());
         assertNotEquals(employee1.hashCode(), employee3.hashCode());
     }
@@ -64,8 +64,8 @@ class EmployeeTest {
         Employee<Integer> employee1 = new Employee<>(1, "Alice", "HR", 50000.0, 4.5, 5, true);
         Employee<Integer> employee2 = new Employee<>(2, "Bob", "Engineering", 60000.0, 4.8, 10, false);
 
-        assertTrue(employee1.compareTo(employee2) > 0); // employee1 has less experience
-        assertTrue(employee2.compareTo(employee1) < 0); // employee2 has more experience
+        assertTrue(employee1.compareTo(employee2) > 0);
+        assertTrue(employee2.compareTo(employee1) < 0);
     }
 
     @Test
