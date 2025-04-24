@@ -18,7 +18,7 @@ import org.employees.EmployeeExceptions.InvalidSalaryException;
 
 
 public class EmployeeDatabase<T> {
-    
+
     private  final Map<T, Employee<T>> employeeMap = new HashMap<>();
     private static final Logger logger = Logger.getLogger(EmployeeDatabase.class.getName());
 
@@ -28,26 +28,21 @@ public class EmployeeDatabase<T> {
             handler.setLevel(Level.ALL);
         }
     }
-    
+
     public void addEmployee(Employee<T> employee) throws InvalidSalaryException {
-        try {
-            if (employee == null) {
-                throw new IllegalArgumentException("Employee cannot be null.");
-            }
-            if (employeeMap.containsKey(employee.getEmployeeId())) {
-                throw new IllegalArgumentException("Employee with this ID already exists.");
-            }
-            if (employee.getSalary() < 0) {
-                throw new EmployeeExceptions.InvalidSalaryException("Salary cannot be negative.");
-            }
-        } catch (IllegalArgumentException e) {
-            logger.log(Level.SEVERE, "Error adding employee: {0}", e.getMessage());
-            return;
+        if (employee == null) {
+            throw new IllegalArgumentException("Employee cannot be null.");
+        }
+        if (employeeMap.containsKey(employee.getEmployeeId())) {
+            throw new IllegalArgumentException("Employee with this ID already exists.");
+        }
+        if (employee.getSalary() < 0) {
+            throw new EmployeeExceptions.InvalidSalaryException("Salary cannot be negative.");
         }
         employeeMap.put(employee.getEmployeeId(), employee);
     }
 
-    
+
     public Collection<Employee<T>> getAllEmployees() {
         try {
             if (employeeMap.isEmpty()) {
@@ -60,7 +55,7 @@ public class EmployeeDatabase<T> {
         return employeeMap.values();
     }
 
-    
+
     public void removeEmployee(T employeeId) {
         try {
             if (employeeId == null) {
@@ -76,7 +71,7 @@ public class EmployeeDatabase<T> {
         employeeMap.remove(employeeId);
     }
 
-    
+
     public boolean updateEmployeeDetails(T employeeId, String field, Object newValue) {
         try {
             Employee<T> employee = employeeMap.get(employeeId);
@@ -121,7 +116,7 @@ public class EmployeeDatabase<T> {
         }
     }
 
-    
+
     public Employee<T> getEmployeeById(T employeeId) {
         try {
             if (employeeId == null) {
@@ -137,7 +132,7 @@ public class EmployeeDatabase<T> {
         return employeeMap.get(employeeId);
     }
 
-    
+
     public List<Employee<T>> getEmployeesByDepartment(String department) throws InvalidDepartmentException {
         if (department == null || department.trim().isEmpty()) {
             throw new EmployeeExceptions.InvalidDepartmentException("Department cannot be empty or null.");
