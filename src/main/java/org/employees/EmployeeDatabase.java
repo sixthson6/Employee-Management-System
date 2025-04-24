@@ -147,67 +147,103 @@ public class EmployeeDatabase<T> {
                 .collect(Collectors.toList());
     }
 
-    
     public List<Employee<T>> searchEmployeesByName(String keyword) {
-
-        return employeeMap.values().stream()
-                .filter(emp -> emp.getName().toLowerCase().contains(keyword.toLowerCase()))
-                .collect(Collectors.toList());
+        try {
+            return employeeMap.values().stream()
+                    .filter(emp -> emp.getName().toLowerCase().contains(keyword.toLowerCase()))
+                    .collect(Collectors.toList());
+        } catch (NullPointerException | ClassCastException e) {
+            logger.log(Level.WARNING, "Error searching employees by name: " + e.getMessage(), e);
+            return Collections.emptyList();
+        }
     }
 
-    
     public List<Employee<T>> getHighPerformers(double threshold) {
-        return employeeMap.values().stream()
-                .filter(emp -> emp.getPerformanceRating() >= threshold)
-                .collect(Collectors.toList());
+        try {
+            return employeeMap.values().stream()
+                    .filter(emp -> emp.getPerformanceRating() >= threshold)
+                    .collect(Collectors.toList());
+        } catch (NullPointerException | ClassCastException e) {
+            logger.log(Level.WARNING, "Error retrieving high performers: " + e.getMessage(), e);
+            return Collections.emptyList();
+        }
     }
 
-    
     public List<Employee<T>> getEmployeesBySalaryRange(double min, double max) {
-        return employeeMap.values().stream()
-                .filter(emp -> emp.getSalary() >= min && emp.getSalary() <= max)
-                .collect(Collectors.toList());
+        try {
+            return employeeMap.values().stream()
+                    .filter(emp -> emp.getSalary() >= min && emp.getSalary() <= max)
+                    .collect(Collectors.toList());
+        } catch (NullPointerException | ClassCastException | IllegalArgumentException e) {
+            logger.log(Level.WARNING, "Error filtering by salary range: " + e.getMessage(), e);
+            return Collections.emptyList();
+        }
     }
-
 
     public Iterator<Employee<T>> getEmployeeIterator() {
-        return employeeMap.values().iterator();
+        try {
+            return employeeMap.values().iterator();
+        } catch (IllegalStateException e) {
+            logger.log(Level.WARNING, "Error getting employee iterator: " + e.getMessage(), e);
+            return Collections.emptyIterator();
+        }
     }
 
-    
     public List<Employee<T>> searchByDepartment(String department) {
-        return employeeMap.values().stream()
-                .filter(emp -> emp.getDepartment().equalsIgnoreCase(department))
-                .collect(Collectors.toList());
+        try {
+            return employeeMap.values().stream()
+                    .filter(emp -> emp.getDepartment().equalsIgnoreCase(department))
+                    .collect(Collectors.toList());
+        } catch (NullPointerException | ClassCastException e) {
+            logger.log(Level.WARNING, "Error searching employees by department: " + e.getMessage(), e);
+            return Collections.emptyList();
+        }
     }
 
-    
     public List<Employee<T>> searchByName(String keyword) {
-        return employeeMap.values().stream()
-                .filter(emp -> emp.getName().toLowerCase().contains(keyword.toLowerCase()))
-                .collect(Collectors.toList());
+        try {
+            return employeeMap.values().stream()
+                    .filter(emp -> emp.getName().toLowerCase().contains(keyword.toLowerCase()))
+                    .collect(Collectors.toList());
+        } catch (NullPointerException | ClassCastException e) {
+            logger.log(Level.WARNING, "Error searching employees by name: " + e.getMessage(), e);
+            return Collections.emptyList();
+        }
     }
 
-    
     public List<Employee<T>> filterByPerformance(double minRating) {
-        return employeeMap.values().stream()
-                .filter(emp -> emp.getPerformanceRating() >= minRating)
-                .collect(Collectors.toList());
+        try {
+            return employeeMap.values().stream()
+                    .filter(emp -> emp.getPerformanceRating() >= minRating)
+                    .collect(Collectors.toList());
+        } catch (NullPointerException | ClassCastException e) {
+            logger.log(Level.WARNING, "Error filtering employees by performance: " + e.getMessage(), e);
+            return Collections.emptyList();
+        }
     }
 
-    
     public List<Employee<T>> filterBySalaryRange(double minSalary, double maxSalary) {
-        return employeeMap.values().stream()
-                .filter(emp -> emp.getSalary() >= minSalary && emp.getSalary() <= maxSalary)
-                .collect(Collectors.toList());
+        try {
+            return employeeMap.values().stream()
+                    .filter(emp -> emp.getSalary() >= minSalary && emp.getSalary() <= maxSalary)
+                    .collect(Collectors.toList());
+        } catch (NullPointerException | ClassCastException | IllegalArgumentException e) {
+            logger.log(Level.WARNING, "Error filtering by salary range: " + e.getMessage(), e);
+            return Collections.emptyList();
+        }
     }
 
     public List<Employee<T>> getTop5HighestPaid() {
-        List<Employee<T>> employees = new ArrayList<>(employeeMap.values());
-        return employees.stream()
-                .sorted((e1, e2) -> Double.compare(e2.getSalary(), e1.getSalary())) // Sort by salary, highest first
-                .limit(5) 
-                .collect(Collectors.toList());
+        try {
+            List<Employee<T>> employees = new ArrayList<>(employeeMap.values());
+            return employees.stream()
+                    .sorted((e1, e2) -> Double.compare(e2.getSalary(), e1.getSalary()))
+                    .limit(5)
+                    .collect(Collectors.toList());
+        } catch (NullPointerException | ClassCastException e) {
+            logger.log(Level.WARNING, "Error retrieving top 5 highest paid employees: " + e.getMessage(), e);
+            return Collections.emptyList();
+        }
     }
 
 }
